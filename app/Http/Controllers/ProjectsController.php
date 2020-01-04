@@ -15,11 +15,17 @@ class ProjectsController extends Controller {
 
     public function store() {
         //validate
-        request()->validate(['title' => 'required']);
+        $attribiutes = request()->validate(['title' => 'required', 'description' => 'required']);
         //persist
-        Project::create(request(['title', 'description']));
+        Project::create($attribiutes);
         //redirect
         return redirect('/projects');
+        
+    }
+    public function show(){
+        //show
+        $project = Project::find(request('project'));
+        return view('projects.show', compact('projects'));
     }
 
 }
