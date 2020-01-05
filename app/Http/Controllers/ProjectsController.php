@@ -7,8 +7,10 @@ use App\Project;
 use Illuminate\Http\Request;
 
 class ProjectsController extends Controller {
+    
 
     public function index() {
+        //index
         $projects = Project::all();
         return view('projects.index', compact('projects'));
     }
@@ -17,14 +19,16 @@ class ProjectsController extends Controller {
         //validate
         $attribiutes = request()->validate([
             'title' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'owner_id' => 'required'
             ]);
+            dd($attribiutes);
         //persist
         Project::create($attribiutes);
         //redirect
-        return redirect('/projects');
-        
+        return redirect('/projects');     
     }
+    
     public function show(Project $project){
         //show
         //$project = Project::findOrfail(request('project'));

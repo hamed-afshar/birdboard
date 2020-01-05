@@ -40,5 +40,13 @@ class ProjectTests extends TestCase
        $project = factory('App\Project')->create();
        $this->get($project->path())
                ->assertSee($project->title)->assertSee($project->description);
+    
+   }
+   
+   /** @test */
+   public function a_project_requires_an_owner() {
+       $this->withoutExceptionHandling();
+       $attributes = factory('App\Project')->raw();
+       $this->post('/projects', $attributes)->assertSessionHasErrors(['owner_id' => null]);
    }
 }
