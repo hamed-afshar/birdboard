@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Project;
-
 use Illuminate\Http\Request;
 
 class ProjectsController extends Controller {
-    
 
     public function index() {
         //index
@@ -20,16 +18,16 @@ class ProjectsController extends Controller {
         $attribiutes = request()->validate([
             'title' => 'required',
             'description' => 'required',
-            'owner_id' => 'required'
-            ]);
-            dd($attribiutes);
+        ]);
+        //$attribiutes['owner_id'] = auth()->id();
+        auth()->user()->projects()->create($attribiutes);
         //persist
         Project::create($attribiutes);
         //redirect
-        return redirect('/projects');     
+        return redirect('/projects');
     }
-    
-    public function show(Project $project){
+
+    public function show(Project $project) {
         //show
         //$project = Project::findOrfail(request('project'));
         return view('projects.show', compact('project'));
