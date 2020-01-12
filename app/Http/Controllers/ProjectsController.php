@@ -9,7 +9,9 @@ class ProjectsController extends Controller {
 
     public function index() {
         //index
-        $projects = Project::all();
+        //$projects = Project::all();
+        $projects = auth()->user()->projects;
+        
         return view('projects.index', compact('projects'));
     }
 
@@ -24,7 +26,7 @@ class ProjectsController extends Controller {
         
         auth()->user()->projects()->create($attribiutes);
         //persist
-        Project::create($attribiutes);
+        //Project::create($attribiutes);
         //redirect
         return redirect('/projects');
     }
@@ -32,6 +34,9 @@ class ProjectsController extends Controller {
     public function show(Project $project) {
         //show
         //$project = Project::findOrfail(request('project'));
+        if(auth()->id() !== $project->owner_id) {
+            abort(403);
+        }
         return view('projects.show', compact('project'));
     }
 

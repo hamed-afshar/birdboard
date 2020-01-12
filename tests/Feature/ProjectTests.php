@@ -13,10 +13,19 @@ class ProjectTests extends TestCase
    use RefreshDatabase;
    
    /** @test */
-   public function only_authenticated_users_can_create_projects() {
+   public function guests_cannot_create_projects() {
        //$this->withoutExceptionHandling();
        $attributes = factory('App\Project')->raw();
        $this->post('/projects', $attributes)->assertRedirect('login');
+   }
+   /** @test */
+   public function guests_cannot_view_projects() {
+       $this->get('/projects')->assertRedirect('login');
+   }
+   /** @test */
+   public function guests_cannot_view_a_single_project() {
+       $project = factory('App\Project')->create();
+       $this->get($project->path())->assertRedirect('login');
    }
    
    /** @test */
@@ -46,7 +55,7 @@ class ProjectTests extends TestCase
    }
    
    /** @test */
-   public function a_user_can_view_a_project() {
+   public function a_user_can_view_their_project() {
        $this->withExceptionHandling();
        $project = factory('App\Project')->create();
        $this->get($project->path())
